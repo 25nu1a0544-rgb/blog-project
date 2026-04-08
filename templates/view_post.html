@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} — BloomLog{% endblock %}
+{% block content %}
+
+<div class="container">
+  <div class="post-wrapper">
+
+    <!-- Header card -->
+    <div class="card post-header-card">
+      {% if post.category == 'Education' %}
+        <span class="post-cat-badge cat-education">📚 Education</span>
+      {% elif post.category == 'Personal Experience' %}
+        <span class="post-cat-badge cat-experience">💡 Personal Experience</span>
+      {% else %}
+        <span class="post-cat-badge cat-travel">✈️ Traveling</span>
+      {% endif %}
+
+      <h1>{{ post.title }}</h1>
+
+      <div class="post-author-row">
+        <div class="author-avatar">{{ post.author[0].upper() }}</div>
+        <div class="author-info">
+          <strong>@{{ post.author }}</strong>
+          <span>{{ post.date }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quote of the day -->
+    <div class="quote-card">
+      <p>{{ quote.split('—')[0].strip() }}</p>
+      {% if '—' in quote %}
+        <small>— {{ quote.split('—')[1].strip() }}</small>
+      {% endif %}
+    </div>
+
+    <!-- Post content -->
+    <div class="card post-content-card">
+      <p class="content">{{ post.content }}</p>
+    </div>
+
+    <!-- Like / Share bar -->
+    <div class="actions-bar">
+      <form action="{{ url_for('like_post', post_id=post.id) }}" method="POST" style="margin:0">
+        <button type="submit" class="like-btn {% if session.get('user') in post.likes %}liked{% endif %}">
+          ❤️ {% if session.get('user') in post.likes %}Liked{% else %}Like{% endif %}
+        </button>
+      </form>
+      <span class="like-count">{{ post.likes|length }} {% if post.likes|length == 1 %}like{% else %}likes{% endif %}</span>
+      <button class="btn btn-ghost btn-sm" onclick="sharePost()" style="margin-left:auto">🔗 Share</button>
+    </div>
+
+    <!-- Thoughts / Comments -->
+    <div class="card thoughts-card">
+      <h3>💬 Your Thoughts</h3>
+
+      {% if session.get('user') %}
+        <div class="thought-form">
+          <textarea id="thought-input" placeholder="What did you think about this post? Share your perspective... 💭"></textarea>
+          <button class="btn btn-primary btn-sm" onclick="submitThought()">Post Thought 💬</button>
+        </div>
+        <hr class="divider" style="margin:1.2rem 0">
+      {% else %}
+        <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:1rem">
+          <a href="{{ url_for('login') }}" style="color:var(--teal);font-weight:700">Log in</a> to share your thoughts.
+        </p>
+      {% endif %}
+
+      {% if post.comments %}
+        {% for c in post.comments|reverse %}
+        <div class="comment">
+          <div class="comment-avatar">{{ c.user[0].upper() }}</div>
+          <div class="comment-body">
+            <strong>@{{ c.user }}</strong>
+            <div class="comment-date">{{ c.date }}</div>
+            <p>{{ c.text }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="no-comments">No thoughts yet — be the first! 🌟</p>
+      {% endif %}
+    </div>
+
+    <!-- Related posts -->
+    {% if related %}
+    <div class="card related-card">
+      <h3>📌 More in {{ post.category }}</h3>
+      {% for r in related %}
+        <a class="related-item" href="{{ url_for('view_post', post_id=r.id) }}">
+          <span class="related-dot"></span>
+          <span>{{ r.title }}</span>
+          <span style="margin-left:auto;font-size:.78rem;color:var(--text-muted)">❤️ {{ r.likes|length }}</span>
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<script>
+function submitThought(){
+  const text = document.getElementById('thought-input').value.trim();
+  if(!text){ alert('Please write something!'); return; }
+  const form = document.createElement('form');
+  form.method='POST'; form.action='{{ url_for("comment_post", post_id=post.id) }}';
+  const i=document.createElement('input'); i.type='hidden'; i.name='thought'; i.value=text; form.appendChild(i);
+  document.body.appendChild(form); form.submit();
+}
+function sharePost(){
+  if(navigator.share){
+    navigator.share({ title:'{{ post.title }}', url: window.location.href });
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert('Link copied to clipboard! 🔗');
+  }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Log In — BloomLog{% endblock %}
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-deco">🌸</div>
+    <div class="auth-header">
+      <h2>Wellcome Back</h2>
+      <p>Here you log in securely 🔒</p>
+    </div>
+
+    <div class="input-group">
+      <label>Username</label>
+      <input type="text" name="username" id="username" placeholder="your username" autocomplete="username"/>
+    </div>
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" name="password" id="password" placeholder="••••••••" autocomplete="current-password"/>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:.5rem" onclick="doLogin()">Log In →</button>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="{{ url_for('register') }}">Sign Up</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function doLogin(){
+  const u = document.getElementById('username').value;
+  const p = document.getElementById('password').value;
+  if(!u||!p){ alert('Please fill in all fields'); return; }
+  const form = document.createElement('form');
+  form.method = 'POST'; form.action = '{{ url_for("login") }}';
+  [['username',u],['password',p]].forEach(([k,v])=>{
+    const i = document.createElement('input');
+    i.type='hidden'; i.name=k; i.value=v; form.appendChild(i);
+  });
+  document.body.appendChild(form); form.submit();
+}
+</script>
+{% endblock %}

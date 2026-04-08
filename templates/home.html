@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% block title %}thought capsule — Home{% endblock %}
+{% block content %}
+
+<div class="container">
+  <!-- HERO -->
+  <div class="hero">
+    <span class="hero-tag">✨ Your Stories Matter</span>
+    <h1>Explore. Learn. <em>Share.</em></h1>
+    <p>A cozy corner for education, personal journeys, and travel tales from real people.</p>
+    {% if session.get('user') %}
+      <a href="{{ url_for('create_post') }}" class="btn btn-primary">✏️ Write a Post</a>
+    {% else %}
+      <a href="{{ url_for('register') }}" class="btn btn-primary">🌸 Join thought capsule</a>
+      <a href="{{ url_for('login') }}" class="btn btn-outline" style="margin-left:10px">Log In</a>
+    {% endif %}
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="category-section">
+    <div class="section-header">
+      <h2 class="section-title"><span>📚</span> Education</h2>
+      <span class="section-badge">Knowledge Hub</span>
+    </div>
+    {% if education %}
+      <div class="posts-grid">
+        {% for post in education %}
+        <div class="card post-card">
+          <span class="post-cat-badge cat-education">📚 Education</span>
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.content[:130] }}{% if post.content|length > 130 %}...{% endif %}</p>
+          <div class="post-meta">
+            <span class="author">@{{ post.author }}</span>
+            <span>{{ post.date }}</span>
+            <span class="likes">❤️ {{ post.likes|length }}</span>
+          </div>
+          <hr class="divider" style="margin:1rem 0">
+          <a href="{{ url_for('view_post', post_id=post.id) }}" class="btn btn-ghost btn-sm">Read More →</a>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="card empty-state">
+        <span class="emoji">📚</span>
+        <p>No education posts yet. Be the first to share something insightful!</p>
+        {% if session.get('user') %}<a href="{{ url_for('create_post') }}" class="btn btn-primary btn-sm" style="margin-top:1rem">Write One</a>{% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- PERSONAL EXPERIENCE — Idea Prompts -->
+  <div class="category-section">
+    <div class="section-header">
+      <h2 class="section-title"><span>💡</span> Personal Experience</h2>
+      <span class="section-badge">Write Your Story</span>
+    </div>
+
+    <div class="ideas-intro card" style="padding:1.4rem 1.8rem; margin-bottom:1.4rem; display:flex; align-items:center; gap:14px;">
+      <span style="font-size:2rem">✨</span>
+      <p style="color:var(--text-muted); font-size:.95rem; line-height:1.6; margin:0">
+        Everyone has a story worth telling. Pick one of these ideas below and start writing — your experience might inspire someone today!
+      </p>
+    </div>
+
+    <div class="ideas-grid">
+
+      <div class="idea-card card" style="--accent-col:#fefcbf; --accent-dark:#d69e2e;">
+        <div class="idea-icon">😤</div>
+        <h3>A Failure That Taught Me Everything</h3>
+        <p>Write about a time you failed badly — and what that experience quietly gave you in return.</p>
+        <div class="idea-tags"><span>Growth</span><span>Resilience</span></div>
+        {% if session.get('user') %}
+          <a href="{{ url_for('create_post') }}" class="idea-btn">Start Writing →</a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="idea-btn">Join to Write →</a>
+        {% endif %}
+      </div>
+
+      <div class="idea-card card" style="--accent-col:#c6f6d5; --accent-dark:#276749;">
+        <div class="idea-icon">🌱</div>
+        <h3>The Habit That Changed My Life</h3>
+        <p>One small daily habit that quietly rewired how you think, feel, or work — share it in detail.</p>
+        <div class="idea-tags"><span>Habits</span><span>Self-Growth</span></div>
+        {% if session.get('user') %}
+          <a href="{{ url_for('create_post') }}" class="idea-btn">Start Writing →</a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="idea-btn">Join to Write →</a>
+        {% endif %}
+      </div>
+
+      <div class="idea-card card" style="--accent-col:#fed7d7; --accent-dark:#9b2c2c;">
+        <div class="idea-icon">💔</div>
+        <h3>Saying Goodbye to Someone or Something</h3>
+        <p>A farewell — to a person, a place, a version of yourself. How did it feel, and what changed after?</p>
+        <div class="idea-tags"><span>Emotion</span><span>Change</span></div>
+        {% if session.get('user') %}
+          <a href="{{ url_for('create_post') }}" class="idea-btn">Start Writing →</a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="idea-btn">Join to Write →</a>
+        {% endif %}
+      </div>
+
+      <div class="idea-card card" style="--accent-col:#bee3f8; --accent-dark:#2b6cb0;">
+        <div class="idea-icon">🧠</div>
+        <h3>The Advice I Wish I Had Gotten</h3>
+        <p>If you could talk to your younger self, what's the one thing you'd say? And why didn't anyone say it?</p>
+        <div class="idea-tags"><span>Wisdom</span><span>Reflection</span></div>
+        {% if session.get('user') %}
+          <a href="{{ url_for('create_post') }}" class="idea-btn">Start Writing →</a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="idea-btn">Join to Write →</a>
+        {% endif %}
+      </div>
+
+      <div class="idea-card card" style="--accent-col:#e9d8fd; --accent-dark:#553c9a;">
+        <div class="idea-icon">🤝</div>
+        <h3>A Stranger Who Changed My Day</h3>
+        <p>One unexpected encounter with a stranger — a kind word, a random act — that stuck with you forever.</p>
+        <div class="idea-tags"><span>People</span><span>Kindness</span></div>
+        {% if session.get('user') %}
+          <a href="{{ url_for('create_post') }}" class="idea-btn">Start Writing →</a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="idea-btn">Join to Write →</a>
+        {% endif %}
+      </div>
+
+      <div class="idea-card card" style="--accent-col:#feebc8; --accent-dark:#c05621;">
+        <div class="idea-icon">🎯</div>
+        <h3>When I Finally Did the Scary Thing</h3>
+        <p>That thing you were terrified to do. What pushed you? What happened? Was it worth it?</p>
+        <div class="idea-tags"><span>Courage</span><span>Action</span></div>
+        {% if session.get('user') %}
+          <a href="{{ url_for('create_post') }}" class="idea-btn">Start Writing →</a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="idea-btn">Join to Write →</a>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TRAVELING — Idea Prompts -->
+  <div class="category-section">
+    <div class="section-header">
+      <h2 class="section-title"><span>✈️</span> Traveling</h2>
+      <span class="section-badge">Share Your Adventures</span>
+    </div>
+
+    <div class="ideas-intro card" style="padding:1.4rem 1.8rem; margin-bottom:1.4rem; display:flex; align-items:center; gap:14px;">
+      <span style="font-size:2rem">🌍</span>
+      <p style="color:var(--text-muted); font-size:.95rem; line-height:1.6; margin:0">
+        Every journey holds a story no one else has lived. From weekend getaways to cross-continent adventures — your travel tale belongs here!
+      </p>
+    </div>
+
+    <div class="ideas-grid">
+
+      <div class="idea-card card travel-idea" style="--accent-col:#c6f6d5; --accent-dark:#276749;">
+        <div class="idea-icon">🗺️</div>
+        <h3>The Place That Surprised Me Most</h3>
+        <p>A destination you had zero expectations for — and it completely blew your mind. What happened?</p>
+        <div class="idea-tags"><span>Discovery</span><span>Adventure</span></div>
+        {% if session.get('user') %}
+          <a href="{{ url_for('create_post') }}" class="idea-btn">Start Writing →</a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="idea-btn">Join to Write →</a>
+        {% endif %}
+      </div>
+
+      <div class="idea-card card travel-idea" style="--accent-col:#bee3f8; --accent-dark:#2b6cb0;">
+        <div class="idea-icon">🍜</div>
+        <h3>The Best Meal I Ever Had Abroad</h3>
+        <p>Paint a picture with words — where was it, what did you eat, and why will you never forget that table?</p>
+        <div class="idea-tags"><span>Food</span><span>Culture</span></div>
+        {% if session.get('user') %}
+          <a href="{{ url_for('create_post') }}" class="idea-btn">Start Writing →</a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="idea-btn">Join to Write →</a>
+        {% endif %}
+      </div>
+
+      <div class="idea-card card travel-idea" style="--accent-col:#fed7d7; --accent-dark:#9b2c2c;">
+        <div class="idea-icon">🚨</div>
+        <h3>When Things Went Horribly Wrong</h3>
+        <p>Missed flights, wrong buses, lost wallets — your travel disaster story (that's actually hilarious now).</p>
+        <div class="idea-tags"><span>Chaos</span><span>Humor</span></div>
+        {% if session.get('user') %}
+          <a href="{{ url_for('create_post') }}" class="idea-btn">Start Writing →</a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="idea-btn">Join to Write →</a>
+        {% endif %}
+      </div>
+
+      <div class="idea-card card travel-idea" style="--accent-col:#fefcbf; --accent-dark:#d69e2e;">
+        <div class="idea-icon">🌅</div>
+        <h3>A Solo Trip That Changed Me</h3>
+        <p>Traveling alone is a different world. What did you learn about yourself when there was nobody else around?</p>
+        <div class="idea-tags"><span>Solo</span><span>Self-Discovery</span></div>
+        {% if session.get('user') %}
+          <a href="{{ url_for('create_post') }}" class="idea-btn">Start Writing →</a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="idea-btn">Join to Write →</a>
+        {% endif %}
+      </div>
+
+      <div class="idea-card card travel-idea" style="--accent-col:#e9d8fd; --accent-dark:#553c9a;">
+        <div class="idea-icon">🏘️</div>
+        <h3>Living Like a Local for a Week</h3>
+        <p>Skipping tourist spots and diving into real everyday life. Markets, buses, neighbors — what did you discover?</p>
+        <div class="idea-tags"><span>Local Life</span><span>Immersion</span></div>
+        {% if session.get('user') %}
+          <a href="{{ url_for('create_post') }}" class="idea-btn">Start Writing →</a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="idea-btn">Join to Write →</a>
+        {% endif %}
+      </div>
+
+      <div class="idea-card card travel-idea" style="--accent-col:#feebc8; --accent-dark:#c05621;">
+        <div class="idea-icon">💸</div>
+        <h3>Traveling on a Shoestring Budget</h3>
+        <p>How did you see a whole new place with almost no money? Your best hacks, tricks, and free adventures.</p>
+        <div class="idea-tags"><span>Budget</span><span>Tips</span></div>
+        {% if session.get('user') %}
+          <a href="{{ url_for('create_post') }}" class="idea-btn">Start Writing →</a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="idea-btn">Join to Write →</a>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+
+  <div style="height:3rem"></div>
+</div>
+{% endblock %}

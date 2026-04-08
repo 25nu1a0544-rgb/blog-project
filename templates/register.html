@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Sign Up — BloomLog{% endblock %}
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-deco">✨</div>
+    <div class="auth-header">
+      <h2>Sign Up</h2>
+      <p>Create an account, it's free 🎉</p>
+    </div>
+
+    <div class="input-group">
+      <label>Username</label>
+      <input type="text" name="username" id="reg_user" placeholder="choose a username"/>
+    </div>
+    <div class="input-group">
+      <label>Email</label>
+      <input type="email" name="email" id="reg_email" placeholder="you@email.com"/>
+    </div>
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" name="password" id="reg_pass" placeholder="••••••••"/>
+    </div>
+    <div class="input-group">
+      <label>Confirm Password</label>
+      <input type="password" id="reg_pass2" placeholder="••••••••"/>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:.5rem" onclick="doRegister()">Create Account 🌸</button>
+
+    <div class="auth-footer">
+      Already have an account? <a href="{{ url_for('login') }}">Log In</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function doRegister(){
+  const u  = document.getElementById('reg_user').value;
+  const e  = document.getElementById('reg_email').value;
+  const p  = document.getElementById('reg_pass').value;
+  const p2 = document.getElementById('reg_pass2').value;
+  if(!u||!e||!p){ alert('Please fill in all fields'); return; }
+  if(p !== p2){ alert('Passwords do not match!'); return; }
+  const form = document.createElement('form');
+  form.method='POST'; form.action='{{ url_for("register") }}';
+  [['username',u],['email',e],['password',p]].forEach(([k,v])=>{
+    const i=document.createElement('input'); i.type='hidden'; i.name=k; i.value=v; form.appendChild(i);
+  });
+  document.body.appendChild(form); form.submit();
+}
+</script>
+{% endblock %}

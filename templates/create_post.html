@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Write a Post — BloomLog{% endblock %}
+{% block content %}
+<div class="container create-wrapper">
+  <div class="card create-card">
+    <div class="create-header">
+      <h2>✏️ Write Something Beautiful</h2>
+      <p>Share your knowledge, experience, or adventure with the world!</p>
+    </div>
+
+    <!-- Tips -->
+    <div class="tips-box">
+      <h4>💡 Writing Tips</h4>
+      <ul>
+        <li>Start with a hook — grab the reader's attention immediately</li>
+        <li>Be personal and authentic — real stories resonate most</li>
+        <li>Use vivid details to paint a picture in the reader's mind</li>
+      </ul>
+    </div>
+
+    <!-- Category picker -->
+    <div class="input-group">
+      <label>Choose a Category</label>
+      <div class="category-picker">
+        <div>
+          <input class="cat-option" type="radio" name="category" id="cat1" value="Education" required/>
+          <label class="cat-label" for="cat1">
+            <span class="cat-emoji">📚</span>Education
+          </label>
+        </div>
+        <div>
+          <input class="cat-option" type="radio" name="category" id="cat2" value="Personal Experience"/>
+          <label class="cat-label" for="cat2">
+            <span class="cat-emoji">💡</span>Experience
+          </label>
+        </div>
+        <div>
+          <input class="cat-option" type="radio" name="category" id="cat3" value="Traveling"/>
+          <label class="cat-label" for="cat3">
+            <span class="cat-emoji">✈️</span>Traveling
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <div class="input-group">
+      <label>Post Title</label>
+      <input type="text" id="title" placeholder="Give your post a compelling title..." maxlength="120"
+             oninput="updateCount('title','title-count',120)"/>
+      <div class="char-count"><span id="title-count">0</span>/120</div>
+    </div>
+
+    <!-- Content -->
+    <div class="input-group">
+      <label>Your Story</label>
+      <textarea id="content" placeholder="Start writing your post here... Tell your story, share your knowledge, describe your journey. The world is waiting to hear from you! 🌍" rows="10"
+                oninput="updateCount('content','content-count',2000)"></textarea>
+      <div class="char-count"><span id="content-count">0</span>/2000</div>
+    </div>
+
+    <div style="display:flex; gap:12px; flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="submitPost()" style="flex:1;justify-content:center">🚀 Publish Post</button>
+      <a href="{{ url_for('home') }}" class="btn btn-ghost" style="flex:0">Cancel</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function updateCount(inputId, countId, max){
+  const len = document.getElementById(inputId).value.length;
+  document.getElementById(countId).textContent = len;
+}
+function submitPost(){
+  const category = document.querySelector('input[name="category"]:checked');
+  const title   = document.getElementById('title').value.trim();
+  const content = document.getElementById('content').value.trim();
+  if(!category){ alert('Please choose a category!'); return; }
+  if(!title)   { alert('Please add a title!'); return; }
+  if(!content) { alert('Please write some content!'); return; }
+  const form = document.createElement('form');
+  form.method='POST'; form.action='{{ url_for("create_post") }}';
+  [['category',category.value],['title',title],['content',content]].forEach(([k,v])=>{
+    const i=document.createElement('input'); i.type='hidden'; i.name=k; i.value=v; form.appendChild(i);
+  });
+  document.body.appendChild(form); form.submit();
+}
+</script>
+{% endblock %}

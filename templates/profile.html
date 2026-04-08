@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}{{ username }}'s Profile — BloomLog{% endblock %}
+{% block content %}
+
+<div class="container">
+  <div class="profile-wrapper">
+
+    <!-- Hero banner -->
+    <div class="profile-hero-card">
+      <div class="profile-avatar">{{ username[0].upper() }}</div>
+      <div class="profile-info">
+        <h2>{{ username }}</h2>
+        <p>📧 {{ user.email }}</p>
+        <p class="joined">📅 Member since {{ user.joined }}</p>
+        {% if user.streak and user.streak > 0 %}
+          <div class="badge-box" style="margin-top:.8rem">
+            <span class="streak-flame">🔥</span>
+            {{ user.streak }}-day writing streak!
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Stats grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-icon">📝</span>
+        <span class="stat-num">{{ posts|length }}</span>
+        <span class="stat-label">Total Posts</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">🔥</span>
+        <span class="stat-num">{{ user.streak or 0 }}</span>
+        <span class="stat-label">Day Streak</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">❤️</span>
+        <span class="stat-num">{{ total_likes }}</span>
+        <span class="stat-label">Total Likes</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">💬</span>
+        <span class="stat-num">{{ total_comments }}</span>
+        <span class="stat-label">Thoughts Received</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">🌟</span>
+        <span class="stat-num">
+          {% if posts|length >= 10 %}Gold
+          {% elif posts|length >= 5 %}Silver
+          {% elif posts|length >= 1 %}Bronze
+          {% else %}New{% endif %}
+        </span>
+        <span class="stat-label">Participation</span>
+      </div>
+    </div>
+
+    <!-- My Posts -->
+    <div class="card my-posts-card">
+      <h3>📖 My Posts</h3>
+
+      {% if posts %}
+        {% for p in posts %}
+        <div class="my-post-item">
+          <div>
+            <a class="my-post-title" href="{{ url_for('view_post', post_id=p.id) }}">{{ p.title }}</a>
+            <div style="margin-top:4px">
+              {% if p.category == 'Education' %}
+                <span class="post-cat-badge cat-education">📚 Education</span>
+              {% elif p.category == 'Personal Experience' %}
+                <span class="post-cat-badge cat-experience">💡 Experience</span>
+              {% else %}
+                <span class="post-cat-badge cat-travel">✈️ Travel</span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="my-post-meta">
+            <span>❤️ {{ p.likes|length }}</span>
+            <span>💬 {{ p.comments|length }}</span>
+            <span>{{ p.date }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty-state">
+          <span class="emoji">✍️</span>
+          <p>You haven't written any posts yet.</p>
+          <a href="{{ url_for('create_post') }}" class="btn btn-primary btn-sm" style="margin-top:1rem">Write Your First Post</a>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}

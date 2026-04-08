@@ -1,0 +1,61 @@
+{
+  "users": {
+    "varshu": {
+      "email": "pakalapativarshini1@gmail.com",
+      "password": "varshini@19",
+      "joined": "2026-04-07",
+      "streak": 1,
+      "last_post_date": "2026-04-07"
+    }
+  },
+  "posts": [
+    {
+      "id": "88ab98f1-4811-482d-861f-af92f7f7ceb3",
+      "title": "\"meal at PARIS\"...",
+      "category": "Traveling",
+      "content": "One fine day I had gone to a  Paris famous restaurant . The Ambiance were too good. Here comes my most fart part the Cuisine I have ordered is ramen was so tasty.",
+      "author": "varshu",
+      "date": "April 07, 2026",
+      "likes": [
+        "varshu"
+      ],
+      "comments": [
+        {
+          "user": "varshu",
+          "text": "its lil dramatic",
+          "date": "Apr 07, 2026"
+        }
+      ]
+    },
+    {
+      "id": "d5f37dad-e54a-40b6-b878-1effb1914e4c",
+      "title": "canada",
+      "category": "Traveling",
+      "content": "it is a beautiful country",
+      "author": "varshu",
+      "date": "April 07, 2026",
+      "likes": [
+        "varshu"
+      ],
+      "comments": []
+    },
+    {
+      "id": "e52f7dd9-8d44-4db3-8a19-6d3b578caf70",
+      "title": "canada",
+      "category": "Traveling",
+      "content": "one of the most coolest country  .it looks chrmingg",
+      "author": "varshu",
+      "date": "April 07, 2026",
+      "likes": [
+        "varshu"
+      ],
+      "comments": [
+        {
+          "user": "varshu",
+          "text": "its goodd",
+          "date": "Apr 07, 2026"
+        }
+      ]
+    }
+  ]
+}
